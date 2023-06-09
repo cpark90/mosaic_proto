@@ -1,0 +1,18 @@
+syntax = "proto3";
+package common;
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = "org.eclipse.mosaic.protos.common";
+// [END java_declaration]
+
+enum StatusType {
+    OFF = 0;
+    STANDBY = 1;
+    INITIALIZE = 2;
+    RUNNING = 3;
+    CLOSING = 4;
+    FAIL = 5;
+    NORMAL = 6;
+    CRITICAL = 7;
+}

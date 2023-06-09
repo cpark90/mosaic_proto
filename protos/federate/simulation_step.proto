@@ -1,0 +1,11 @@
+syntax = "proto3";
+package federate;
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = "org.eclipse.mosaic.protos.federate";
+// [END java_declaration]
+
+message SimulationStep {
+    string fedName = 1;
+}

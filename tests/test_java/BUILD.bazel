@@ -1,0 +1,75 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_java//java:defs.bzl", "java_proto_library")
+load("@io_bazel_rules_docker//lang:image.bzl", container_image = "app_layer")
+
+
+java_proto_library(
+    name = "simulation_step_java_proto",
+    deps = [
+        "//protos/federate:simulation_step_proto",
+    ]
+)
+
+java_proto_library(
+    name = "federate_message_wrapper_java_proto",
+    deps = [
+        "//protos/federate:federate_message_wrapper_proto",
+    ]
+)
+
+java_proto_library(
+    name = "mediator_status_java_proto",
+    deps = [
+        "//protos/federate:mediator_status_proto",
+    ]
+)
+
+java_proto_library(
+    name = "types_java_proto",
+    deps = [
+        "//protos/common:types_proto",
+    ]
+)
+
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["src/main/java/**/javatest/*.java"])
+)
+
+java_library(
+    name = "javatest-library",
+    srcs = [
+        ":srcs",
+        ],
+    resources = glob(["src/main/resources/**/*"]),
+    deps = [
+        ":simulation_step_java_proto",
+        ":federate_message_wrapper_java_proto",
+        ":mediator_status_java_proto",
+        ":types_java_proto",
+    ],
+)
+
+java_binary(
+    name = "javatest-app",
+    srcs = glob(["src/main/java/**/javatest/JavaTest.java"]),
+    resources = glob(["src/main/resources/**/*"]),
+    deps = [
+        ":javatest-library",
+        ":simulation_step_java_proto",
+        ":federate_message_wrapper_java_proto",
+        ":mediator_status_java_proto",
+        ":types_java_proto",
+    ],
+    main_class = "org.eclipse.javatest.JavaTest",
+)
+
+container_image(
+    name = "java_test_image",
+    base = "@java-base-image//image",
+    workdir="/app",
+    binary = ":javatest-app",
+    docker_run_flags = "-it --rm --network=host --runtime=nvidia",
+)

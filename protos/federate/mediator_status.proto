@@ -1,0 +1,14 @@
+syntax = "proto3";
+package federate;
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = "org.eclipse.mosaic.protos.federate";
+// [END java_declaration]
+
+import "protos/common/types.proto";
+
+message MediatorStatus {
+    string fedName = 1;
+    common.StatusType status = 2;
+}

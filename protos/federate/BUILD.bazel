@@ -1,0 +1,31 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+proto_library(
+    name = "simulation_step_proto",
+    srcs = [
+        "simulation_step.proto",
+    ]
+)
+
+proto_library(
+    name = "mediator_status_proto",
+    srcs = [
+        "mediator_status.proto",
+    ],
+    deps = [
+        "//protos/common:types_proto",
+    ]
+)
+
+proto_library(
+    name = "federate_message_wrapper_proto",
+    srcs = [
+        "federate_message_wrapper.proto"
+    ],
+    deps = [
+        ":simulation_step_proto",
+        ":mediator_status_proto",
+    ]
+)

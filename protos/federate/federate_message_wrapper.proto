@@ -1,0 +1,17 @@
+syntax = "proto3";
+package federate;
+
+// [START java_declaration]
+option java_multiple_files = true;
+option java_package = "org.eclipse.mosaic.protos.federate";
+// [END java_declaration]
+
+import "protos/federate/simulation_step.proto";
+import "protos/federate/mediator_status.proto";
+
+message FederateMessageWrapper {
+  oneof message {
+    SimulationStep simulationStep = 1;
+    MediatorStatus mediatorStatus = 2;
+  }
+}

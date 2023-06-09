@@ -1,0 +1,56 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_proto_library")
+load("@rules_python//python:defs.bzl", "py_library", "py_binary")
+load("@python_deps//:requirements.bzl", "requirement")
+load("@io_bazel_rules_docker//lang:image.bzl", container_image = "app_layer")
+
+
+py_proto_library(
+    name = "simulation_step_pb2",
+    deps = [
+        "//protos/federate:simulation_step_proto",
+    ]
+)
+
+py_proto_library(
+    name = "federate_message_wrapper_pb2",
+    deps = [
+        "//protos/federate:federate_message_wrapper_proto",
+    ]
+)
+
+py_proto_library(
+    name = "mediator_status_pb2",
+    deps = [
+        "//protos/federate:mediator_status_proto",
+    ]
+)
+
+py_proto_library(
+    name = "types_pb2",
+    deps = [
+        "//protos/common:types_proto",
+    ]
+)
+
+
+py_binary(
+    name = "python_test",
+    srcs = [
+        "python_test.py",
+    ],
+    deps = [
+        ":simulation_step_pb2",
+        ":federate_message_wrapper_pb2",
+        ":mediator_status_pb2",
+        ":types_pb2",
+    ]
+)
+
+container_image(
+    name = "python_test_image",
+    base = "@java-base-image//image",
+    binary = ":python_test",
+    docker_run_flags = "-it --rm --network=host --runtime=nvidia",
+)
